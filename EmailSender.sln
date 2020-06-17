@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.Core", "EricNee.EmailSender.Core\EricNee.EmailSender.Core.csproj", "{78F230E1-4ECC-4F1F-B1CE-C7FE018242B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.Business", "EricNee.EmailSender.Business\EricNee.EmailSender.Business.csproj", "{EE5A045A-8651-4CEB-907D-B50634D36600}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.DataAccess", "EricNee.EmailSender.DataAccess\EricNee.EmailSender.DataAccess.csproj", "{811D7491-1992-4A74-8F4C-013A9DFE2F66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.WindowsService", "EricNee.EmailSender.WindowsService\EricNee.EmailSender.WindowsService.csproj", "{47C044BF-6E53-4621-9DE8-27F7FB168F35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.Test", "EricNee.EmailSender.Test\EricNee.EmailSender.Test.csproj", "{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78F230E1-4ECC-4F1F-B1CE-C7FE018242B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F230E1-4ECC-4F1F-B1CE-C7FE018242B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F230E1-4ECC-4F1F-B1CE-C7FE018242B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F230E1-4ECC-4F1F-B1CE-C7FE018242B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5A045A-8651-4CEB-907D-B50634D36600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE5A045A-8651-4CEB-907D-B50634D36600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE5A045A-8651-4CEB-907D-B50634D36600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE5A045A-8651-4CEB-907D-B50634D36600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{811D7491-1992-4A74-8F4C-013A9DFE2F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{811D7491-1992-4A74-8F4C-013A9DFE2F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{811D7491-1992-4A74-8F4C-013A9DFE2F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{811D7491-1992-4A74-8F4C-013A9DFE2F66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47C044BF-6E53-4621-9DE8-27F7FB168F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47C044BF-6E53-4621-9DE8-27F7FB168F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47C044BF-6E53-4621-9DE8-27F7FB168F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47C044BF-6E53-4621-9DE8-27F7FB168F35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
