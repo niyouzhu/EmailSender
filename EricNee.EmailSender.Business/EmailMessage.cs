@@ -8,9 +8,9 @@ namespace EricNee.EmailSender.Business
 {
     public class EmailMessage
     {
-        public Guid MessageId { get; set; }
+        public Guid MessageId { get; set; } = Guid.NewGuid();
 
-        public DateTime CreatedTime { get; set; }
+        public DateTime CreatedTime { get; set; } = DateTime.Now;
 
         public string Subject { get; set; }
 
@@ -20,11 +20,11 @@ namespace EricNee.EmailSender.Business
 
         public MailAddress From { get; set; }
 
-        public MailAddressCollection To { get; set; }
+        public MailAddressCollection To { get; } = new MailAddressCollection();
 
-        public MailAddressCollection CC { get; set; }
+        public MailAddressCollection CC { get; } = new MailAddressCollection();
 
-        public MailAddressCollection BCC { get; set; }
+        public MailAddressCollection BCC { get; } = new MailAddressCollection();
 
     }
 }

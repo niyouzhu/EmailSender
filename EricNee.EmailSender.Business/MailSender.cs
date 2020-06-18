@@ -38,15 +38,12 @@ namespace EricNee.EmailSender.Business
         public SuccessMailQueue SuccessQueue { get; }
         public FailureMailQueue FailureQueue { get; }
 
-        private object _lcok = new object();
-
         public void Scan()
         {
-            lock (_lcok)
-            {
-                if (BacklogQueue.Data.Count == 0)
-                    BacklogQueue.Scan();
-            }
+            if (BacklogQueue.Data.Count == 0)
+                BacklogQueue.Scan();
+            if (InProcessQueue.Data.Count == 0)
+                InProcessQueue.Scan();
             EmailMessage message = null;
             try
             {

@@ -61,6 +61,10 @@
       <Project>{EE5A045A-8651-4CEB-907D-B50634D36600}</Project>
       <Name>EricNee.EmailSender.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EricNee.EmailSender.Core\EricNee.EmailSender.Core.csproj">
+      <Project>{78f230e1-4ecc-4f1f-b1ce-c7fe018242b4}</Project>
+      <Name>EricNee.EmailSender.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -64,9 +64,9 @@ namespace EricNee.EmailSender.Business
                 }
 
                 message.From = Unformat(mailEntry.From);
-                message.To = to;
-                message.CC = cc;
-                message.BCC = bcc;
+                message.To.AddRange(to);
+                message.CC.AddRange(cc);
+                message.BCC.AddRange(bcc);
                 return message;
             }
             throw new EmailException($"{nameof(value)} is not correct type.");

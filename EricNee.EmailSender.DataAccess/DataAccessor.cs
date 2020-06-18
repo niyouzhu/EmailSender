@@ -27,6 +27,13 @@ namespace EricNee.EmailSender.DataAccess
 
         }
 
+        public IEnumerable<MailEntry> GetInProcessEntries()
+        {
+            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC FROM INPROCESS";
+            return Database.ExecuteSqlStringAccessor<MailEntry>(sql);
+
+        }
+
         public int RemoveFromBacklog(MailEntry entry)
         {
             var sql = $"DELETE FROM BACKLOG WHERE ID = @Id";

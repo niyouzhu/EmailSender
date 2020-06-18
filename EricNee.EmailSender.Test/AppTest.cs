@@ -33,7 +33,11 @@ namespace EricNee.EmailSender.Test
             var cc = new MailAddressCollection() { new MailAddress("eric.nee@ssab.com", "Foo"), new MailAddress("eric.nee@ssab.com") };
             var to = new MailAddressCollection() { new MailAddress("eric.nee@ssab.com", "Foo"), new MailAddress("eric.nee@ssab.com") };
             var from = new MailAddress("eric.nee@ssab.com");
-            QueueManager.Instance.AddToBacklog(new EmailMessage() { From = from, BCC = bcc, CC = cc, To = to, Body = "Hellworlkd", CreatedTime = DateTime.Now, MessageId = Guid.NewGuid(), IsHtml = false, Subject = "Foobar" });
+            var message = new EmailMessage() { From = from, Body = "Hellworlkd", CreatedTime = DateTime.Now, MessageId = Guid.NewGuid(), IsHtml = false, Subject = "Foobar" };
+            message.BCC.AddRange(bcc);
+            message.CC.AddRange(cc);
+            message.To.AddRange(to);
+            QueueManager.Instance.AddToBacklog(message);
         }
 
         [TestMethod]
@@ -42,11 +46,7 @@ namespace EricNee.EmailSender.Test
         {
             for (int i = 0; i < 1000; i++)
             {
-                var bcc = new MailAddressCollection() { new MailAddress("eric.nee@ssab.com", "Foo"), new MailAddress("eric.nee@ssab.com") };
-                var cc = new MailAddressCollection() { new MailAddress("eric.nee@ssab.com", "Foo"), new MailAddress("eric.nee@ssab.com") };
-                var to = new MailAddressCollection() { new MailAddress("eric.nee@ssab.com", "Foo"), new MailAddress("eric.nee@ssab.com") };
-                var from = new MailAddress("eric.nee@ssab.com");
-                QueueManager.Instance.AddToBacklog(new EmailMessage() { From = from, BCC = bcc, CC = cc, To = to, Body = "Hellworlkd", CreatedTime = DateTime.Now, MessageId = Guid.NewGuid(), IsHtml = false, Subject = "Foobar" });
+                TestAddToBacklog();
             }
         }
 

@@ -29,20 +29,30 @@ namespace EricNee.EmailSender.Business
             var rt = Data.TryDequeue(out message);
             if (rt)
             {
-                DataAccessor.RemoveFromBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+                lock (_lock)
+                    DataAccessor.RemoveFromBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
             }
             return rt;
         }
 
+        private object _lock = new object();
+
         public void Enqueue(EmailMessage message)
         {
-            DataAccessor.AddToBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+            lock (_lock)
+            {
+                DataAccessor.AddToBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+            }
             Data.Enqueue(message);
         }
 
         public void Scan()
         {
-            var backlog = DataAccessor.GetBacklogEntries();
+            IEnumerable<MailEntry> backlog;
+            lock (_lock)
+            {
+                backlog = DataAccessor.GetBacklogEntries();
+            }
             foreach (var item in backlog)
             {
                 Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
