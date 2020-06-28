@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.Windows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.Test", "EricNee.EmailSender.Test\EricNee.EmailSender.Test.csproj", "{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.IService", "EricNee.EmailSender.IService\EricNee.EmailSender.IService.csproj", "{C8743133-350F-48E5-9CDF-28CBF923FAEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricNee.EmailSender.Service", "EricNee.EmailSender.Service\EricNee.EmailSender.Service.csproj", "{8F3AFDFD-C18D-4678-A274-3D2BA3268223}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50A62716-0AC6-4E4A-BC36-3CFC895EBC2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8743133-350F-48E5-9CDF-28CBF923FAEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8743133-350F-48E5-9CDF-28CBF923FAEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8743133-350F-48E5-9CDF-28CBF923FAEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8743133-350F-48E5-9CDF-28CBF923FAEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F3AFDFD-C18D-4678-A274-3D2BA3268223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F3AFDFD-C18D-4678-A274-3D2BA3268223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F3AFDFD-C18D-4678-A274-3D2BA3268223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F3AFDFD-C18D-4678-A274-3D2BA3268223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

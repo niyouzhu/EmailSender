@@ -26,13 +26,16 @@ namespace EricNee.EmailSender.Business
 
         public bool Dequeue(out EmailMessage message)
         {
-            var rt = Data.TryDequeue(out message);
-            if (rt)
+            lock (_lock)
             {
-                lock (_lock)
+                var rt = Data.TryDequeue(out message);
+                if (rt)
+                {
                     DataAccessor.RemoveFromBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+                }
+                return rt;
             }
-            return rt;
+               
         }
 
         private object _lock = new object();
@@ -42,20 +45,19 @@ namespace EricNee.EmailSender.Business
             lock (_lock)
             {
                 DataAccessor.AddToBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+                Data.Enqueue(message);
             }
-            Data.Enqueue(message);
         }
 
         public void Scan()
         {
-            IEnumerable<MailEntry> backlog;
             lock (_lock)
             {
-                backlog = DataAccessor.GetBacklogEntries();
-            }
-            foreach (var item in backlog)
-            {
-                Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
+                var backlog = DataAccessor.GetBacklogEntries();
+                foreach (var item in backlog)
+                {
+                    Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
+                }
             }
         }
     }

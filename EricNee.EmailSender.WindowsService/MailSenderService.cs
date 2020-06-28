@@ -10,9 +10,9 @@ using System.Text;
 
 namespace EricNee.EmailSender.WindowsService
 {
-    public partial class EmailSenderService : ServiceBase
+    public partial class MailSenderService : ServiceBase
     {
-        public EmailSenderService()
+        public MailSenderService()
         {
             InitializeComponent();
         }

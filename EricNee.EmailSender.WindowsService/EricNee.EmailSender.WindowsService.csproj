@@ -11,6 +11,8 @@
     <AssemblyName>EricNee.EmailSender.WindowsService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,27 +47,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProjectInstaller.cs">
+    <Compile Include="MailSenderService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ProjectInstaller.Designer.cs">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    <Compile Include="MailSenderService.Designer.cs">
+      <DependentUpon>MailSenderService.cs</DependentUpon>
     </Compile>
-    <Compile Include="EmailSenderService.cs">
+    <Compile Include="MailService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EmailSenderService.Designer.cs">
-      <DependentUpon>EmailSenderService.cs</DependentUpon>
+    <Compile Include="MailService.Designer.cs">
+      <DependentUpon>MailService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MailServiceInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MailServiceInstaller.Designer.cs">
+      <DependentUpon>MailServiceInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    <EmbeddedResource Include="MailSenderService.resx">
+      <DependentUpon>MailSenderService.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EmailSenderService.resx">
-      <DependentUpon>EmailSenderService.cs</DependentUpon>
+    <EmbeddedResource Include="MailService.resx">
+      <DependentUpon>MailService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MailServiceInstaller.resx">
+      <DependentUpon>MailServiceInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -73,11 +84,38 @@
       <Project>{EE5A045A-8651-4CEB-907D-B50634D36600}</Project>
       <Name>EricNee.EmailSender.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EricNee.EmailSender.IService\EricNee.EmailSender.IService.csproj">
+      <Project>{c8743133-350f-48e5-9cdf-28cbf923faec}</Project>
+      <Name>EricNee.EmailSender.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EricNee.EmailSender.Service\EricNee.EmailSender.Service.csproj">
+      <Project>{8f3afdfd-c18d-4678-a274-3d2ba3268223}</Project>
+      <Name>EricNee.EmailSender.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Include="App.Debug.config">
+      <DependentUpon>App.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+    </None>
+    <None Include="App.Release.config">
+      <DependentUpon>App.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

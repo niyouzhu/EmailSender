@@ -8,9 +8,9 @@ using System.Linq;
 namespace EricNee.EmailSender.WindowsService
 {
     [RunInstaller(true)]
-    public partial class ProjectInstaller : System.Configuration.Install.Installer
+    public partial class MailServiceInstaller : System.Configuration.Install.Installer
     {
-        public ProjectInstaller()
+        public MailServiceInstaller()
         {
             InitializeComponent();
         }

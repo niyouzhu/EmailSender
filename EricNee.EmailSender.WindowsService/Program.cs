@@ -16,7 +16,8 @@ namespace EricNee.EmailSender.WindowsService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new EmailSenderService()
+                new MailService(),
+                new MailSenderService()
             };
             ServiceBase.Run(ServicesToRun);
         }

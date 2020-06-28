@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ServiceTest.cs" />
     <Compile Include="AppTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\EricNee.EmailSender.Core\EricNee.EmailSender.Core.csproj">
       <Project>{78f230e1-4ecc-4f1f-b1ce-c7fe018242b4}</Project>
       <Name>EricNee.EmailSender.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EricNee.EmailSender.Service\EricNee.EmailSender.Service.csproj">
+      <Project>{8F3AFDFD-C18D-4678-A274-3D2BA3268223}</Project>
+      <Name>EricNee.EmailSender.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

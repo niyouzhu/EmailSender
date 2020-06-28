@@ -12,7 +12,7 @@ namespace EricNee.EmailSender.Business
     {
         public MailSender Sender { get; }
 
-        private Timer Timer { get; } = new Timer(100);
+        private Timer Timer { get; } = new Timer(10);
 
         public App() : this(MailSettings.GetSettings())
         {
@@ -32,7 +32,7 @@ namespace EricNee.EmailSender.Business
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(ex,"EmailSender");
+                    Trace.WriteLine(ex, "EmailSender");
                 }
             };
         }

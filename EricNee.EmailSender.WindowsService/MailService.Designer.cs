@@ -1,6 +1,6 @@
 ﻿namespace EricNee.EmailSender.WindowsService
 {
-    partial class EmailSenderService
+    partial class MailService
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             // 
-            // EmailSenderService
+            // MailService
             // 
-            this.ServiceName = "EmailSender";
+            this.ServiceName = "MailService";
 
         }
 
