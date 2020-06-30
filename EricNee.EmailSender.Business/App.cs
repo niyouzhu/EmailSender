@@ -32,7 +32,7 @@ namespace EricNee.EmailSender.Business
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(ex, "EmailSender");
+                    Trace.WriteLine($"Time: {DateTime.Now}; {ex}", "EmailSender");
                 }
             };
         }
