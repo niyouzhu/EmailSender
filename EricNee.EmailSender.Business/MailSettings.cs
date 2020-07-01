@@ -18,6 +18,9 @@ namespace EricNee.EmailSender.Business
         [ConfigurationProperty("UserName")]
 
         public string UserName { get { return (string)this["UserName"]; } set { this["UserName"] = value; } }
+        [ConfigurationProperty("SmtpInterval", DefaultValue = 0.1)]
+
+        public double SmtpInterval { get { return (double)this["SmtpInterval"]; } set { this["SmtpInterval"] = value; } }
 
         public static MailSettings GetSettings()
         {

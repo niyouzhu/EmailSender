@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EricNee.EmailSender.Business;
 using System.Net.Mail;
+using System.Threading;
 
 namespace EricNee.EmailSender.Test
 {
@@ -16,6 +17,7 @@ namespace EricNee.EmailSender.Test
             var app = new App(new MailSettings() { Host = "smtp.ssab.com" });
             app.Run();
 
+
         }
 
         [TestMethod]
@@ -23,6 +25,9 @@ namespace EricNee.EmailSender.Test
         {
             var app = new App();
             app.Run();
+            Thread.Sleep(50000);
+            app.Stop();
+            Thread.Sleep(50000);
 
         }
         [TestMethod]
@@ -44,7 +49,7 @@ namespace EricNee.EmailSender.Test
 
         public void TestAddToBacklog2()
         {
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10; i++)
             {
                 TestAddToBacklog();
             }
@@ -55,5 +60,5 @@ namespace EricNee.EmailSender.Test
         {
         }
 
-           }
+    }
 }

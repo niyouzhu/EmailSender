@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EricNee.EmailSender.Business
 {
@@ -38,31 +40,128 @@ namespace EricNee.EmailSender.Business
         public SuccessMailQueue SuccessQueue { get; }
         public FailureMailQueue FailureQueue { get; }
 
-        public void Scan()
-        {
-            if (BacklogQueue.Data.Count == 0)
-                BacklogQueue.Scan();
-            if (InProcessQueue.Data.Count == 0)
-                InProcessQueue.Scan();
-            EmailMessage message = null;
-            try
-            {
-                if (BacklogQueue.Dequeue(out message))
-                {
-                    InProcessQueue.Enqueue(message);
-                }
-                if (InProcessQueue.Dequeue(out message))
-                {
-                    MailClient.Send(message);
-                    SuccessQueue.Enqueue(message);
-                }
-            }
-            catch (Exception)
-            {
-                FailureQueue.Enqueue(message);
-                throw;
-            }
+        private object _backlogLock = new object();
 
+        public Task Send()
+        {
+            Stopped.Value = false;
+            return Task.Factory.ContinueWhenAll(new[] { Scan(), Process() }, (tasks) =>
+            {
+                foreach (var task in tasks)
+                {
+                    if (task.IsFaulted)
+                    {
+                        throw task.Exception.Flatten();
+                    }
+                }
+
+            });
+        }
+
+        public object _inProcessLock = new object();
+
+        private Task ProcessBacklog()
+        {
+            return Task.Factory.StartNew(state =>
+            {
+
+                if (!((InternalStop)state).Value)
+                {
+                    lock (_backlogLock)
+                    {
+                        EmailMessage message = null;
+                        try
+                        {
+                            while (BacklogQueue.Dequeue(out message) && !((InternalStop)state).Value)
+                            {
+                                InProcessQueue.Enqueue(message);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            FailureQueue.Enqueue(message);
+                            throw;
+                        }
+
+
+                    }
+                }
+            }, Stopped, TaskCreationOptions.AttachedToParent);
+        }
+
+        private Task ProcessInProcess()
+        {
+            return Task.Factory.StartNew(state =>
+            {
+
+                if (!((InternalStop)state).Value)
+                {
+                    lock (_inProcessLock)
+                    {
+                        EmailMessage message = null;
+                        try
+                        {
+                            while (InProcessQueue.Dequeue(out message) && !((InternalStop)state).Value)
+                            {
+                                MailClient.Send(message);
+                                SuccessQueue.Enqueue(message);
+                                Thread.Sleep((int)(1000 * MailSettings.SmtpInterval));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            FailureQueue.Enqueue(message);
+                            throw;
+
+                        }
+
+
+                    }
+                }
+            }, Stopped, TaskCreationOptions.AttachedToParent);
+        }
+        private Task Process()
+        {
+            return Task.Factory.ContinueWhenAll(new[] { ProcessBacklog(), ProcessInProcess() }, tasks =>
+            {
+                foreach (var task in tasks)
+                {
+                    if (task.IsFaulted)
+                        throw task.Exception.Flatten();
+                }
+
+            });
+        }
+
+        private InternalStop Stopped { get; } = new InternalStop() { Value = false };
+
+        private class InternalStop
+        {
+            public bool Value { get; set; } = false;
+        }
+
+        private Task Scan()
+        {
+            return Task.Factory.StartNew(state =>
+            {
+                if (!((InternalStop)state).Value)
+                {
+                    lock (_backlogLock)
+                    {
+                        BacklogQueue.Scan();
+                    }
+                    lock (_inProcessLock)
+                    {
+                        InProcessQueue.Scan(); // for directly insert data to db
+                    }
+                }
+            }, Stopped, TaskCreationOptions.AttachedToParent);
+
+        }
+
+        public void Stop()
+        {
+            Stopped.Value = true;
         }
     }
 

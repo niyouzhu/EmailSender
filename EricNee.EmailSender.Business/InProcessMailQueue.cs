@@ -21,41 +21,30 @@ namespace EricNee.EmailSender.Business
             get;
         }
 
-        private object _lock = new object();
         public bool Dequeue(out EmailMessage message)
         {
-            lock (_lock)
+            var rt = Data.TryDequeue(out message);
+            if (rt)
             {
-                var rt = Data.TryDequeue(out message);
-                if (rt)
-                {
-                    DataAccessor.RemoveFromInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
-                }
-                return rt;
+                DataAccessor.RemoveFromInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
             }
-
+            return rt;
         }
 
         public void Enqueue(EmailMessage message)
         {
-            lock (_lock)
-            {
-                DataAccessor.AddToInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
-                Data.Enqueue(message);
-            }
+            DataAccessor.AddToInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+            Data.Enqueue(message);
         }
 
         public void Scan()
         {
-            lock (_lock)
+            var inInprocess = DataAccessor.GetInProcessEntries();
+            foreach (var item in inInprocess)
             {
-                var inInprocess = DataAccessor.GetInProcessEntries();
-                foreach (var item in inInprocess)
-                {
+                if (!Data.Select(it => it.MessageId).Contains(item.Id))
                     Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
-                }
             }
-
         }
     }
 }

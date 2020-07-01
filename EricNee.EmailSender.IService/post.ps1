@@ -1,1 +1,1 @@
-﻿copy EricNee.EmailSender.IService.dll C:\SVN\ItemMasterCreation\branches\Reconstruction\SSAB.APP\Refs\EmailSender.IService.dll
+﻿copy EricNee.EmailSender.IService.dll C:\SVN\ItemMasterCreation\branches\Reconstruction\SSAB.APP\Refs\
