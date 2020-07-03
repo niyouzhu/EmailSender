@@ -23,28 +23,40 @@ namespace EricNee.EmailSender.Business
 
         public bool Dequeue(out EmailMessage message)
         {
-            var rt = Data.TryDequeue(out message);
-            if (rt)
+            lock (_lock)
             {
-                DataAccessor.RemoveFromInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+                var rt = Data.TryDequeue(out message);
+                if (rt)
+                    DataAccessor.RemoveFromInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+                return rt;
             }
-            return rt;
+
         }
 
         public void Enqueue(EmailMessage message)
         {
-            DataAccessor.AddToInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
-            Data.Enqueue(message);
-        }
-
-        public void Scan()
-        {
-            var inInprocess = DataAccessor.GetInProcessEntries();
-            foreach (var item in inInprocess)
+            lock (_lock)
             {
-                if (!Data.Select(it => it.MessageId).Contains(item.Id))
-                    Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
+                Data.Enqueue(message);
+                DataAccessor.AddToInProcess((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+
             }
         }
+        private object _lock = new object();
+        public void Scan()
+        {
+            lock (_lock)
+            {
+                var inProcess = DataAccessor.GetInProcessEntries();
+                foreach (var item in inProcess)
+                {
+                    if (!Data.Select(it => it.MessageId).Contains(item.Id))
+                        Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
+                }
+
+            }
+
+        }
+
     }
 }

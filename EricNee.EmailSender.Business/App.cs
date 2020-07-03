@@ -11,21 +11,35 @@ namespace EricNee.EmailSender.Business
 {
     public class App : IDisposable
     {
+        public event Action<ExceptionEventArgs> OnException;
+
         public MailSender Sender { get; }
 
-        private Timer _timer;
-        private Timer Timer
+        private Timer _scanningTimer;
+        private Timer ScanningTimer
         {
             get
             {
-                if (_timer == null)
-                    _timer = new Timer(1000);
-                return _timer;
+                if (_scanningTimer == null)
+                    _scanningTimer = new Timer(1000);
+                return _scanningTimer;
 
             }
-            set { _timer = value; }
+            set { _scanningTimer = value; }
         }
 
+        private Timer _sendingTimer;
+        private Timer SendingTimer
+        {
+            get
+            {
+                if (_sendingTimer == null)
+                    _sendingTimer = new Timer(1000);
+                return _sendingTimer;
+
+            }
+            set { _sendingTimer = value; }
+        }
         public App() : this(MailSettings.GetSettings())
         {
 
@@ -34,20 +48,55 @@ namespace EricNee.EmailSender.Business
         public App(MailSettings settings)
         {
             var dataAccessor = new DataAccessor();
-            Sender = new MailSender(new BacklogMailQueue(dataAccessor), new InProcessMailQueue(dataAccessor), new SuccessMailQueue(dataAccessor), new FailureMailQueue(dataAccessor), settings);
-            Timer.Elapsed += (o, e) =>
+            Sender = new MailSender(new BacklogMailQueue(dataAccessor), new InProcessMailQueue(dataAccessor), new SuccessMailQueue(dataAccessor), new FailureMailQueue(dataAccessor), new RealTimeMailQueue(dataAccessor), settings);
+            bool scanning = false;
+            //object scanningLock = new object();
+            ScanningTimer.Elapsed += (o, e) =>
             {
-                var task = Sender.Send();
-                task.ContinueWith(t =>
+                if (!scanning)
                 {
-                    Trace.WriteLine($"Time: {DateTime.Now}; {t.Exception.Flatten()}", "EmailSender");
+                    scanning = true;
+                    var task = Sender.Scan();
+                    task.ContinueWith(t =>
+                    {
+                        scanning = false;
+                        if (t.IsFaulted)
+                        {
+                            var eventArgs = new ExceptionEventArgs(t.Exception);
+                            OnException?.Invoke(eventArgs);
+                        }
+                    });
+                }
 
-                }, TaskContinuationOptions.OnlyOnFaulted);
+            };
+            bool sending = false;
+            SendingTimer.Elapsed += (o, e) =>
+            {
+                if (!sending)
+                {
+                    sending = true;
+                    var task = Sender.Send();
+                    task.ContinueWith(t =>
+                    {
+                        sending = false;
+                        if (t.IsFaulted)
+                        {
+                            var eventArgs = new ExceptionEventArgs(t.Exception);
+                            OnException?.Invoke(eventArgs);
+                        }
+
+                    });
+                }
 
 
             };
 
-            Timer.Disposed += (o, e) =>
+            ScanningTimer.Disposed += (o, e) =>
+            {
+                Sender.Stop();
+            };
+
+            SendingTimer.Disposed += (o, e) =>
             {
                 Sender.Stop();
             };
@@ -56,31 +105,30 @@ namespace EricNee.EmailSender.Business
 
 
         private bool _disposed;
-        private object _lock = new object();
         public void Dispose()
         {
-            lock (_lock)
+            if (!_disposed)
             {
-                if (!_disposed)
-                {
-                    Timer.Dispose();
-                    _disposed = true;
-
-                }
+                _disposed = true;
+                Stop();
             }
         }
 
         public void Run()
         {
-            //Sender.Scan();
-            Timer.Start();
+            ScanningTimer.Start();
+            SendingTimer.Start();
         }
 
         public void Stop()
         {
-            Timer.Stop();
-            Timer.Dispose();
-            Timer = null;
+            ScanningTimer.Stop();
+            ScanningTimer.Dispose();
+            ScanningTimer = null;
+            SendingTimer.Stop();
+            SendingTimer.Dispose();
+            SendingTimer = null;
+
         }
     }
 }

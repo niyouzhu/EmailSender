@@ -7,10 +7,9 @@ using System.Collections.Concurrent;
 
 namespace EricNee.EmailSender.Business
 {
-    public class BacklogMailQueue : IMailQueue<EmailMessage>
+    public class RealTimeMailQueue : IMailQueue<EmailMessage>
     {
-
-        public BacklogMailQueue(DataAccessor dataAccessor)
+        public RealTimeMailQueue(DataAccessor dataAccessor)
         {
             DataAccessor = dataAccessor;
         }
@@ -24,6 +23,16 @@ namespace EricNee.EmailSender.Business
             get;
         }
 
+        public void Enqueue(EmailMessage message)
+        {
+            lock (_lock)
+            {
+                Data.Enqueue(message);
+                DataAccessor.AddToRealTime((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+            }
+        }
+        private object _lock = new object();
+
         public bool Dequeue(out EmailMessage message)
         {
             lock (_lock)
@@ -31,30 +40,18 @@ namespace EricNee.EmailSender.Business
                 var rt = Data.TryDequeue(out message);
                 if (rt)
                 {
-                    DataAccessor.RemoveFromBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
+                    DataAccessor.RemoveFromRealTime((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
                 }
                 return rt;
             }
         }
 
-
-        public void Enqueue(EmailMessage message)
-        {
-            lock (_lock)
-            {
-                Data.Enqueue(message);
-                DataAccessor.AddToBacklog((MailEntry)EmailMessageConverter.ConvertTo(message, typeof(MailEntry)));
-            }
-        }
-
-        private object _lock = new object();
-
         public void Scan()
         {
             lock (_lock)
             {
-                var backlog = DataAccessor.GetBacklogEntries();
-                foreach (var item in backlog)
+                var realTime = DataAccessor.GetRealTimeEntries();
+                foreach (var item in realTime)
                 {
                     if (!Data.Select(it => it.MessageId).Contains(item.Id))
                         Data.Enqueue((EmailMessage)EmailMessageConverter.ConvertFrom(item));
@@ -62,5 +59,9 @@ namespace EricNee.EmailSender.Business
             }
         }
 
+        public void RemoveFromStore(EmailMessage message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -11,12 +11,13 @@ namespace EricNee.EmailSender.Business
     public class MailSender
     {
 
-        public MailSender(BacklogMailQueue backlogQueue, InProcessMailQueue inProcessQueue, SuccessMailQueue successQueue, FailureMailQueue failureQueue, MailSettings settings)
+        public MailSender(BacklogMailQueue backlogQueue, InProcessMailQueue inProcessQueue, SuccessMailQueue successQueue, FailureMailQueue failureQueue, RealTimeMailQueue realTimeQueue, MailSettings settings)
         {
             BacklogQueue = backlogQueue;
             InProcessQueue = inProcessQueue;
             SuccessQueue = successQueue;
             FailureQueue = failureQueue;
+            RealTimeQueue = realTimeQueue;
             MailSettings = settings;
         }
 
@@ -39,26 +40,15 @@ namespace EricNee.EmailSender.Business
         public InProcessMailQueue InProcessQueue { get; }
         public SuccessMailQueue SuccessQueue { get; }
         public FailureMailQueue FailureQueue { get; }
+        public RealTimeMailQueue RealTimeQueue { get; }
 
         private object _backlogLock = new object();
 
         public Task Send()
         {
             Stopped.Value = false;
-            return Task.Factory.ContinueWhenAll(new[] { Scan(), Process() }, (tasks) =>
-            {
-                foreach (var task in tasks)
-                {
-                    if (task.IsFaulted)
-                    {
-                        throw task.Exception.Flatten();
-                    }
-                }
-
-            });
+            return Process();
         }
-
-        public object _inProcessLock = new object();
 
         private Task ProcessBacklog()
         {
@@ -67,23 +57,18 @@ namespace EricNee.EmailSender.Business
 
                 if (!((InternalStop)state).Value)
                 {
-                    lock (_backlogLock)
+                    EmailMessage message = null;
+                    while (BacklogQueue.Dequeue(out message) && !((InternalStop)state).Value)
                     {
-                        EmailMessage message = null;
                         try
                         {
-                            while (BacklogQueue.Dequeue(out message) && !((InternalStop)state).Value)
-                            {
-                                InProcessQueue.Enqueue(message);
-                            }
+                            InProcessQueue.Enqueue(message);
                         }
                         catch (Exception)
                         {
                             FailureQueue.Enqueue(message);
                             throw;
                         }
-
-
                     }
                 }
             }, Stopped, TaskCreationOptions.AttachedToParent);
@@ -96,17 +81,15 @@ namespace EricNee.EmailSender.Business
 
                 if (!((InternalStop)state).Value)
                 {
-                    lock (_inProcessLock)
+                    EmailMessage message = null;
+                    while (InProcessQueue.Dequeue(out message) && !((InternalStop)state).Value)
                     {
-                        EmailMessage message = null;
                         try
                         {
-                            while (InProcessQueue.Dequeue(out message) && !((InternalStop)state).Value)
-                            {
-                                MailClient.Send(message);
-                                SuccessQueue.Enqueue(message);
-                                Thread.Sleep((int)(1000 * MailSettings.SmtpInterval));
-                            }
+                            RealTimeQueue.Enqueue(message);
+                            MailClient.Send(message);
+                            SuccessQueue.Enqueue(message);
+                            Thread.Sleep((int)(1000 * MailSettings.SmtpInterval));
                         }
                         catch (Exception)
                         {
@@ -114,11 +97,13 @@ namespace EricNee.EmailSender.Business
                             throw;
 
                         }
-
-
+                        finally
+                        {
+                            RealTimeQueue.Dequeue(out message);
+                        }
                     }
                 }
-            }, Stopped, TaskCreationOptions.AttachedToParent);
+            }, Stopped, TaskCreationOptions.AttachedToParent | TaskCreationOptions.LongRunning);
         }
         private Task Process()
         {
@@ -127,7 +112,7 @@ namespace EricNee.EmailSender.Business
                 foreach (var task in tasks)
                 {
                     if (task.IsFaulted)
-                        throw task.Exception.Flatten();
+                        throw task.Exception;
                 }
 
             });
@@ -140,19 +125,25 @@ namespace EricNee.EmailSender.Business
             public bool Value { get; set; } = false;
         }
 
-        private Task Scan()
+        private bool _firstRun = true;
+        public Task Scan()
         {
+            Stopped.Value = false;
             return Task.Factory.StartNew(state =>
             {
                 if (!((InternalStop)state).Value)
                 {
-                    lock (_backlogLock)
+                    BacklogQueue.Scan();
+                    InProcessQueue.Scan(); // for directly insert data to db
+                    if (_firstRun)
                     {
-                        BacklogQueue.Scan();
-                    }
-                    lock (_inProcessLock)
-                    {
-                        InProcessQueue.Scan(); // for directly insert data to db
+                        _firstRun = false;
+                        RealTimeQueue.Scan();
+                        EmailMessage message;
+                        while (!((InternalStop)state).Value && RealTimeQueue.Dequeue(out message))
+                        {
+                            InProcessQueue.Enqueue(message);
+                        }
                     }
                 }
             }, Stopped, TaskCreationOptions.AttachedToParent);

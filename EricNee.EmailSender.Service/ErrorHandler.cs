@@ -18,7 +18,7 @@ namespace EricNee.EmailSender.Service
 
         public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
-            var fe = new FaultException("There is an error occurred during call, if you want to know more detail please contact Eric (niyouzhu#163.com).");
+            var fe = new FaultException("There is an error occurred during call, if you want to know more detail please contact Admin.");
             var mf = fe.CreateMessageFault();
             fault = Message.CreateMessage(version, mf, fe.Action);
             Trace.WriteLine(error);

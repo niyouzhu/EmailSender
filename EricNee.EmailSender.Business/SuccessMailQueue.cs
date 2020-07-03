@@ -36,5 +36,10 @@ namespace EricNee.EmailSender.Business
         {
             throw new NotImplementedException();
         }
+
+        public void RemoveFromStore(EmailMessage message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

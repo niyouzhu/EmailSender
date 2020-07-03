@@ -17,12 +17,26 @@ namespace EricNee.EmailSender.WindowsService
             InitializeComponent();
         }
 
-        public App App { get; } = new App();
+        private App _app;
+        public App App
+        {
+            get
+            {
+                if (_app == null)
+                {
+                    _app = new App();
+                    _app.OnException += (e) =>
+                    {
+                        Trace.WriteLine($"Time: {DateTime.Now}; {e.Ex}", "EmailSender");
+                    };
+                }
+                return _app;
+            }
+        }
         protected override void OnStart(string[] args)
         {
             App.Run();
         }
-
         protected override void OnStop()
         {
             App.Stop();

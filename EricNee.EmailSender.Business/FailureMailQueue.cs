@@ -35,5 +35,6 @@ namespace EricNee.EmailSender.Business
         {
             throw new NotImplementedException();
         }
+
     }
 }

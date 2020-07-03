@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="EmailMessageTypeConverter.cs" />
+    <Compile Include="ExceptionEventArgs.cs" />
     <Compile Include="FailureMailQueue.cs" />
     <Compile Include="InProcessMailQueue.cs" />
     <Compile Include="IMailQueue.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="MailSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueManager.cs" />
+    <Compile Include="RealTimeMailQueue.cs" />
     <Compile Include="SuccessMailQueue.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -25,7 +25,7 @@ namespace EricNee.EmailSender.Test
         {
             var app = new App();
             app.Run();
-            Thread.Sleep(50000);
+            Thread.Sleep(5000000);
             app.Stop();
             Thread.Sleep(50000);
 
