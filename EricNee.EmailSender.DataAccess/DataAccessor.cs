@@ -76,8 +76,8 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@IsHtml", System.Data.DbType.Boolean, entry.IsHtml);
             Database.AddInParameter(cmd, "@From", System.Data.DbType.String, entry.From);
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.To);
+            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
+            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -98,8 +98,8 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@IsHtml", System.Data.DbType.Boolean, entry.IsHtml);
             Database.AddInParameter(cmd, "@From", System.Data.DbType.String, entry.From);
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.To);
+            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
+            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -121,8 +121,8 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@IsHtml", System.Data.DbType.Boolean, entry.IsHtml);
             Database.AddInParameter(cmd, "@From", System.Data.DbType.String, entry.From);
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.To);
+            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
+            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -145,8 +145,8 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@IsHtml", System.Data.DbType.Boolean, entry.IsHtml);
             Database.AddInParameter(cmd, "@From", System.Data.DbType.String, entry.From);
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.To);
+            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
+            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -176,8 +176,8 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@IsHtml", System.Data.DbType.Boolean, entry.IsHtml);
             Database.AddInParameter(cmd, "@From", System.Data.DbType.String, entry.From);
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.To);
-            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.To);
+            Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
+            Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;

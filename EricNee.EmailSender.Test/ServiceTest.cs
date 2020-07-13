@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EricNee.EmailSender.Service;
 using System.Net.Mail;
 using System.Threading;
+using EricNee.EmailSender.IService;
 
 namespace EricNee.EmailSender.Test
 {
@@ -15,10 +16,12 @@ namespace EricNee.EmailSender.Test
         [TestMethod]
         public void TestService()
         {
-            var app = new App();
-            app.Run();
-            Thread.Sleep(1000 * 60 * 10);
-
+            using (var client = new MailServiceClient())
+            {
+                var mailMessage = new EmailMessage() { MessageId = Guid.NewGuid(), Subject = "Hello World", IsHtml = true, CreatedTime = DateTime.Now, From = new IService.MailAddress("Foo@er.com"), Body = "Foobar" };
+                mailMessage.To.Add(new IService.MailAddress("Bar@he.com"));
+                client.Send(mailMessage);
+            }
         }
     }
 }
