@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -22,8 +23,22 @@ namespace EricNee.EmailSender.IService
             rt.BCC.AddRange(message.BCC.ConvertTo());
             rt.CC.AddRange(message.CC.ConvertTo());
             rt.To.AddRange(message.To.ConvertTo());
+            foreach (var item in message.Attachments)
+            {
+                rt.Attachments.Add(item.ConvertTo());
+            }
             return rt;
         }
+
+        public static System.Net.Mail.Attachment ConvertTo(this MailAttachment attachment)
+        {
+            var memoryStream = new MemoryStream();
+            memoryStream.Write(attachment.Content, 0, attachment.Content.Length);
+            memoryStream.Position = 0;
+            return new Attachment(memoryStream, attachment.FileName, attachment.MediaType);
+        }
+
+
 
         public static System.Net.Mail.MailAddress ConvertTo(this MailAddress address)
         {

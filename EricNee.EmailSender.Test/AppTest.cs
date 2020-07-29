@@ -42,6 +42,7 @@ namespace EricNee.EmailSender.Test
             message.BCC.AddRange(bcc);
             message.CC.AddRange(cc);
             message.To.AddRange(to);
+            message.Attachments.Add(new Attachment("HelloWorld.txt"));
             QueueManager.Instance.AddToBacklog(message);
         }
 

@@ -29,6 +29,7 @@ namespace EricNee.EmailSender.Business
                 message.To.AddRange(emailMessage.To);
                 message.CC.AddRange(emailMessage.CC);
                 message.Bcc.AddRange(emailMessage.BCC);
+                message.Attachments.AddRange(emailMessage.Attachments);
                 smtpClient.Send(message);
             }
 

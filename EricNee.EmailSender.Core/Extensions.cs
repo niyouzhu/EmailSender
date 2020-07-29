@@ -21,5 +21,13 @@ namespace System.Net.Mail
                 source.Add(item);
             }
         }
+
+        public static void AddRange(this AttachmentCollection source, AttachmentCollection range)
+        {
+            foreach (var item in range)
+            {
+                source.Add(item);
+            }
+        }
     }
 }

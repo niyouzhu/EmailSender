@@ -4,6 +4,7 @@ using EricNee.EmailSender.Service;
 using System.Net.Mail;
 using System.Threading;
 using EricNee.EmailSender.IService;
+using System.IO;
 
 namespace EricNee.EmailSender.Test
 {
@@ -19,7 +20,9 @@ namespace EricNee.EmailSender.Test
             using (var client = new MailServiceClient())
             {
                 var mailMessage = new EmailMessage() { MessageId = Guid.NewGuid(), Subject = "Hello World", IsHtml = true, CreatedTime = DateTime.Now, From = new IService.MailAddress("Foo@er.com"), Body = "Foobar" };
-                mailMessage.To.Add(new IService.MailAddress("Bar@he.com"));
+                mailMessage.Attachments.Add(new MailAttachment("HelloWorld.txt", "application/octet-stream") { Content = File.ReadAllBytes("HelloWorld.txt") });
+                mailMessage.Attachments.Add(new MailAttachment("HelloWorld.jpg", "application/octet-stream") { Content = File.ReadAllBytes("HelloWorld.jpg") });
+                mailMessage.To.Add(new IService.MailAddress("eric.nee@ssab.com"));
                 client.Send(mailMessage);
             }
         }

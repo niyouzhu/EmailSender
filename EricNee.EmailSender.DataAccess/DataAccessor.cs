@@ -22,19 +22,19 @@ namespace EricNee.EmailSender.DataAccess
 
         public IEnumerable<MailEntry> GetBacklogEntries()
         {
-            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC FROM BACKLOG";
+            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC, Attachments FROM BACKLOG";
             return Database.ExecuteSqlStringAccessor<MailEntry>(sql);
 
         }
         public IEnumerable<MailEntry> GetRealTimeEntries()
         {
-            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC FROM REALTIME";
+            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC, Attachments FROM REALTIME";
             return Database.ExecuteSqlStringAccessor<MailEntry>(sql);
 
         }
         public IEnumerable<MailEntry> GetInProcessEntries()
         {
-            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC FROM INPROCESS";
+            var sql = "SELECT ID, SUBJECT, CREATEDTIME, BODY, ISHTML, [FROM], [TO], CC, BCC, Attachments FROM INPROCESS";
             return Database.ExecuteSqlStringAccessor<MailEntry>(sql);
 
         }
@@ -66,7 +66,7 @@ namespace EricNee.EmailSender.DataAccess
            ,[From]
            ,[To]
            ,[CC]
-           ,[BCC]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC)";
+           ,[BCC],[Attachments]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC,@Attachments)";
             var cmd = Database.GetSqlStringCommand(sql);
             Database.AddInParameter(cmd, "@Id", System.Data.DbType.Guid, entry.Id);
             Database.AddInParameter(cmd, "@Subject", System.Data.DbType.String, entry.Subject);
@@ -78,6 +78,7 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
             Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
             Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
+            Database.AddInParameter(cmd, "@Attachments", System.Data.DbType.String, entry.Attachments);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -88,7 +89,7 @@ namespace EricNee.EmailSender.DataAccess
            ,[From]
            ,[To]
            ,[CC]
-           ,[BCC]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC)";
+           ,[BCC],[Attachments]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC,@Attachments)";
             var cmd = Database.GetSqlStringCommand(sql);
             Database.AddInParameter(cmd, "@Id", System.Data.DbType.Guid, entry.Id);
             Database.AddInParameter(cmd, "@Subject", System.Data.DbType.String, entry.Subject);
@@ -100,6 +101,7 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
             Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
             Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
+            Database.AddInParameter(cmd, "@Attachments", System.Data.DbType.String, entry.Attachments);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -111,7 +113,7 @@ namespace EricNee.EmailSender.DataAccess
            ,[From]
            ,[To]
            ,[CC]
-           ,[BCC]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC)";
+           ,[BCC],[Attachments]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC,@Attachments)";
             var cmd = Database.GetSqlStringCommand(sql);
             Database.AddInParameter(cmd, "@Id", System.Data.DbType.Guid, entry.Id);
             Database.AddInParameter(cmd, "@Subject", System.Data.DbType.String, entry.Subject);
@@ -123,6 +125,7 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
             Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
             Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
+            Database.AddInParameter(cmd, "@Attachments", System.Data.DbType.String, entry.Attachments);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -135,7 +138,7 @@ namespace EricNee.EmailSender.DataAccess
         ,[From]
            ,[To]
            ,[CC]
-           ,[BCC]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC)";
+           ,[BCC],[Attachments]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC ,@Attachments)";
             var cmd = Database.GetSqlStringCommand(sql);
             Database.AddInParameter(cmd, "@Id", System.Data.DbType.Guid, entry.Id);
             Database.AddInParameter(cmd, "@Subject", System.Data.DbType.String, entry.Subject);
@@ -147,6 +150,7 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
             Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
             Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
+            Database.AddInParameter(cmd, "@Attachments", System.Data.DbType.String, entry.Attachments);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;
@@ -166,7 +170,7 @@ namespace EricNee.EmailSender.DataAccess
         ,[From]
            ,[To]
            ,[CC]
-           ,[BCC]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC)";
+           ,[BCC], [Attachments]) VALUES(@Id, @Subject, @CreatedTime, @Body, @IsHtml, @From, @To, @CC, @BCC, @Attachments)";
             var cmd = Database.GetSqlStringCommand(sql);
             Database.AddInParameter(cmd, "@Id", System.Data.DbType.Guid, entry.Id);
             Database.AddInParameter(cmd, "@Subject", System.Data.DbType.String, entry.Subject);
@@ -178,6 +182,7 @@ namespace EricNee.EmailSender.DataAccess
             Database.AddInParameter(cmd, "@To", System.Data.DbType.String, entry.To);
             Database.AddInParameter(cmd, "@CC", System.Data.DbType.String, entry.CC);
             Database.AddInParameter(cmd, "@BCC", System.Data.DbType.String, entry.BCC);
+            Database.AddInParameter(cmd, "@Attachments", System.Data.DbType.String, entry.Attachments);
             Database.ExecuteNonQuery(cmd);
             entry.CreatedTime = now;
             return entry;

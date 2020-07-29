@@ -62,5 +62,17 @@ namespace EricNee.EmailSender.IService
                 return _bcc;
             }
         }
+
+        private MailAttachmentCollection _attachments;
+        [DataMember]
+        public MailAttachmentCollection Attachments
+        {
+            get
+            {
+                if (_attachments == null)
+                    _attachments = new MailAttachmentCollection();
+                return _attachments;
+            }
+        }
     }
 }

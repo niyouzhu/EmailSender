@@ -25,5 +25,7 @@ namespace EricNee.EmailSender.DataAccess
         public string CC { get; set; }
         public string BCC { get; set; }
 
+        public string Attachments { get; set; }
+
     }
 }

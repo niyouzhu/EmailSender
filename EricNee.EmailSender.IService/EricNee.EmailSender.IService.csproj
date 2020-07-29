@@ -61,6 +61,7 @@
     <Compile Include="IMailService.cs" />
     <Compile Include="MailAddress.cs" />
     <Compile Include="MailAddressCollection.cs" />
+    <Compile Include="MailAttachment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
