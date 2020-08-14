@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.Data;
+﻿using EricNee.BaseComponent.DataAccess;
+using Microsoft.Practices.EnterpriseLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace EricNee.EmailSender.DataAccess
     {
         public static Database CreateInstance()
         {
-            return DatabaseFactory.CreateDatabase("EmailSender");
+            return WrappedDatabaseFactory.Instance.CreateDatabase("EmailSender");
         }
     }
 }
