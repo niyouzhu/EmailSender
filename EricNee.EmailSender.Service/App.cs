@@ -27,6 +27,7 @@ namespace EricNee.EmailSender.Service
         public void Run()
         {
             var binding = new System.ServiceModel.BasicHttpBinding();
+            binding.MaxReceivedMessageSize = 2147483647;
             var smb = Host.Description.Behaviors.Find<ServiceMetadataBehavior>();
             if (smb == null)
             {
