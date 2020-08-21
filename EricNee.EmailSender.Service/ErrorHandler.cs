@@ -21,7 +21,7 @@ namespace EricNee.EmailSender.Service
             var fe = new FaultException("There is an error occurred during call, if you want to know more detail please contact Admin.");
             var mf = fe.CreateMessageFault();
             fault = Message.CreateMessage(version, mf, fe.Action);
-            Trace.WriteLine(error);
+            Trace.WriteLine(error,"EmailService");
         }
     }
 }

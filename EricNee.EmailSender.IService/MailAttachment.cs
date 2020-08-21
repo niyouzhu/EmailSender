@@ -15,9 +15,9 @@ namespace EricNee.EmailSender.IService
         public MailAttachment(string filePath, string mediaType)
         {
             FilePath = filePath;
-            FileName = Path.GetFileName(FileName);
+            FileName = Path.GetFileName(FilePath);
             MediaType = mediaType;
-            Content = File.ReadAllBytes(filePath);
+            Content = File.ReadAllBytes(FilePath);
         }
 
         public MailAttachment(string filePath) : this(filePath, "application/octet-stream")
