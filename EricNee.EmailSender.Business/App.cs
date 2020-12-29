@@ -122,12 +122,19 @@ namespace EricNee.EmailSender.Business
 
         public void Stop()
         {
-            ScanningTimer.Stop();
-            ScanningTimer.Dispose();
-            ScanningTimer = null;
-            SendingTimer.Stop();
-            SendingTimer.Dispose();
-            SendingTimer = null;
+            if (_scanningTimer != null)
+            {
+                _scanningTimer.Stop();
+                _scanningTimer.Dispose();
+                _scanningTimer = null;
+            }
+            if (_sendingTimer != null)
+            {
+                _sendingTimer.Stop();
+                _sendingTimer.Dispose();
+                _sendingTimer = null;
+            }
+
 
         }
     }

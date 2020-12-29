@@ -12,31 +12,32 @@ namespace EricNee.EmailSender.Service
     public class App : IDisposable
     {
 
-        public ServiceHost Host { get; private set; } = new ServiceHost(typeof(MailService), new Uri("http://localhost:8090"));
+        private ServiceHost _host;
+        public ServiceHost Host
+        {
+            get
+            {
+                if (_host == null)
+                {
+                    _host = new ServiceHost(typeof(MailService));
+                }
+                return _host;
+
+            }
+        }
         private bool _disposed;
         public void Dispose()
         {
-            if (!_disposed && Host != null)
+            if (!_disposed && _host != null)
             {
                 _disposed = true;
-                Host.Close();
-                Host = null;
+                _host.Close();
+                _host = null;
             }
         }
 
         public void Run()
         {
-            var binding = new System.ServiceModel.BasicHttpBinding();
-            binding.MaxReceivedMessageSize = 2147483647;
-            var smb = Host.Description.Behaviors.Find<ServiceMetadataBehavior>();
-            if (smb == null)
-            {
-                smb = new ServiceMetadataBehavior() { HttpGetEnabled = true };
-                smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-                Host.Description.Behaviors.Add(smb);
-            };
-            Host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexHttpBinding(), "mex");
-            Host.AddServiceEndpoint(typeof(IMailService), binding, "MailService.svc");
             Host.Open();
         }
 

@@ -26,5 +26,21 @@ namespace EricNee.EmailSender.Test
                 client.Send(mailMessage);
             }
         }
+
+        [TestMethod]
+        public void TestApp()
+        {
+            using (var app = new App())
+            {
+                app.Run();
+                Thread.Sleep(1000000);
+            }
+        }
+
+        [TestMethod]
+        public void TestAppWithoutProgramming()
+        {
+            Thread.Sleep(1000000);
+        }
     }
 }

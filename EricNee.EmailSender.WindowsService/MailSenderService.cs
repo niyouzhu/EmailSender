@@ -27,7 +27,7 @@ namespace EricNee.EmailSender.WindowsService
                     _app = new App();
                     _app.OnException += (e) =>
                     {
-                        Trace.WriteLine($"{e.Ex}", "EmailSender");
+                        Trace.TraceError($"{e.Ex}");
                     };
                 }
                 return _app;
