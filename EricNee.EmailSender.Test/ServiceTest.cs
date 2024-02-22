@@ -19,10 +19,10 @@ namespace EricNee.EmailSender.Test
         {
             using (var client = new MailServiceClient())
             {
-                var mailMessage = new EmailMessage() { MessageId = Guid.NewGuid(), Subject = "Hello World", IsHtml = true, CreatedTime = DateTime.Now, From = new IService.MailAddress("Foo@er.com"), Body = "Foobar" };
+                var mailMessage = new EmailMessage() {  Subject = "Hello World", IsHtml = true, From = new IService.MailAddress("system@gyzet.com"), Body = "Foobar" };
                 mailMessage.Attachments.Add(new MailAttachment("HelloWorld.txt", "application/octet-stream") { Content = File.ReadAllBytes("HelloWorld.txt") });
                 mailMessage.Attachments.Add(new MailAttachment("HelloWorld.jpg", "application/octet-stream") { Content = File.ReadAllBytes("HelloWorld.jpg") });
-                mailMessage.To.Add(new IService.MailAddress("eric.nee@ssab.com"));
+                mailMessage.To.Add(new IService.MailAddress("niyouzhu@gyzet.com"));
                 client.Send(mailMessage);
             }
         }

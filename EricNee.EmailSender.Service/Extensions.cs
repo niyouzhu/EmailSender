@@ -14,7 +14,7 @@ namespace EricNee.EmailSender.IService
             var rt = new Business.EmailMessage()
             {
                 Body = message.Body,
-                CreatedTime = message.CreatedTime,
+                CreatedTime = message.CreatedTime.HasValue ? message.CreatedTime.Value : DateTime.Now,
                 From = message.From.ConvertTo(),
                 IsHtml = message.IsHtml,
                 MessageId = message.MessageId,

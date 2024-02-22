@@ -6,16 +6,21 @@ using System.Text;
 
 namespace EricNee.EmailSender.IService
 {
-    [DataContract]
+    [DataContract(Namespace = "http://me.zhuoyue.me")]
     public class EmailMessage
     {
-        [DataMember]
-        public Guid MessageId { get; set; } = Guid.NewGuid();
-        [DataMember]
+        //[DataMember]
+        [IgnoreDataMember]
+        public Guid MessageId { get { if (_messageId == Guid.Empty) _messageId = Guid.NewGuid(); return _messageId; } }
+        private Guid _messageId;
 
-        public DateTime CreatedTime { get; set; } = DateTime.Now;
-        [DataMember]
 
+        [IgnoreDataMember]
+        public DateTime? CreatedTime { get { if (_now == null) _now = DateTime.Now; return _now; } }
+        private DateTime? _now;
+
+
+        [DataMember]
         public string Subject { get; set; }
         [DataMember]
 
@@ -37,6 +42,11 @@ namespace EricNee.EmailSender.IService
                     _to = new MailAddressCollection();
                 return _to;
             }
+            set
+            {
+                _to = value;
+
+            }
         }
         private MailAddressCollection _cc;
 
@@ -49,6 +59,7 @@ namespace EricNee.EmailSender.IService
                     _cc = new MailAddressCollection();
                 return _cc;
             }
+            set { _cc = value; }
         }
         private MailAddressCollection _bcc;
 
@@ -61,6 +72,7 @@ namespace EricNee.EmailSender.IService
                     _bcc = new MailAddressCollection();
                 return _bcc;
             }
+            set { _bcc = value; }
         }
 
         private MailAttachmentCollection _attachments;
@@ -73,6 +85,7 @@ namespace EricNee.EmailSender.IService
                     _attachments = new MailAttachmentCollection();
                 return _attachments;
             }
+            set { _attachments = value; }
         }
     }
 }

@@ -8,10 +8,14 @@ using System.Text;
 
 namespace EricNee.EmailSender.IService
 {
-    [DataContract]
+    [DataContract(Namespace = "http://me.zhuoyue.me")]
+    [Serializable]
 
     public class MailAttachment
     {
+
+        public MailAttachment() { }
+
         public MailAttachment(string filePath, string mediaType)
         {
             FilePath = filePath;
@@ -25,26 +29,37 @@ namespace EricNee.EmailSender.IService
 
         }
 
-        public MailAttachment(byte[] content) : this(content, "application/octet-stream")
+        public MailAttachment(byte[] content) : this(content, null)
         {
         }
-        public MailAttachment(byte[] content, string mediaType)
+        public MailAttachment(byte[] content, string fileName, string mediaType)
         {
+            Content = content;
+            FileName = fileName;
+            MediaType = mediaType;
         }
-        [DataMember]
+        public MailAttachment(byte[] content, string fileName) : this(content, fileName, "application/octet-stream")
+        {
+            Content = content;
+        }
+        [IgnoreDataMember]
         public string FilePath { get; set; }
 
         [DataMember]
         public string FileName { get; set; }
-        [DataMember]
 
+        [DataMember]
         public byte[] Content { get; set; }
-        [DataMember]
 
-        public string MediaType { get; set; }
+        [DataMember]
+        public string MediaType { get { if (string.IsNullOrWhiteSpace(_mediaType)) _mediaType = "application/octet-stream"; return _mediaType; } set { _mediaType = value; } }
+
+        private string _mediaType;
+
     }
 
-    [CollectionDataContract]
+    [CollectionDataContract(Namespace = "http://me.zhuoyue.me")]
+    [Serializable]
 
     public class MailAttachmentCollection : Collection<MailAttachment>
     {
